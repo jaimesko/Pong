@@ -1,17 +1,6 @@
-#from pong import colors#, paddle, ball
 import logging
-import collections as c 
-color_tuples = c.namedtuple("color_tuples", "black white red green blue")
-colors = color_tuples(
-    black=(0, 0, 0),
-    white=(255, 255, 255),
-    red=(255, 0, 0),
-    green=(0, 255, 0),
-    blue=(0, 0, 255),
-)
-
-dx = 10
-WIDTH, HEIGHT = 600, 800 
+from drawing import colors
+from settings import *
 
 class Ball:
 
@@ -24,7 +13,7 @@ class Ball:
         self.y = int(HEIGHT / 2)
         # ball_dxy = [random.randint(-60,60),200]
         self.dx = 0 / 60
-        self.dy = 400 / 60  # Too fast
+        self.dy = 300 / 60 
         self.counter = 1
 
     def __repr__(self):
@@ -34,21 +23,24 @@ class Ball:
         return f"Ball"
     
     def reset_ball(self):
+        """Resets the ball to its starting position."""
         logging.info(f"Reseting {self.__class__.__name__}")
         self.x = int(WIDTH / 2)
         self.y = int(HEIGHT / 2)
         self.dx = 0 / 60
-        self.dy = 400 / 60
+        self.dy = 300 / 60
         self.counter = 1
         return self
 
     def update(self):
+        """Update the the ball's position after a game tick."""
         logging.debug(f"Ball position update")
         self.x += self.dx
         self.y += self.dy
         return self
 
     def collisions(self, rect, paddle):
+        """Checks for collision with the paddle and the walls."""
         logging.debug(f"Ball collisions check")
         
         # Paddle collision

@@ -1,42 +1,19 @@
-import pygame
 import sys
 import logging
-import collections as c 
-
+import pygame
 from ball import Ball
 from paddle import Paddle
+from drawing import draw
+from settings import *
 
 def error_details():
+    """Return error information."""
     return (
         f"{sys.exc_info()[0]}: {sys.exc_info()[1]}. Line: {sys.exc_info()[2].tb_lineno}"
     )
 
-color_tuples = c.namedtuple("color_tuples", "black white red green blue")
-colors = color_tuples(
-    black=(0, 0, 0),
-    white=(255, 255, 255),
-    red=(255, 0, 0),
-    green=(0, 255, 0),
-    blue=(0, 0, 255),
-)
-
-def draw(win, paddle, ball) -> None:
-    logging.debug("Drawing window")
-    win.fill(colors.black)
-    pygame.draw.line(win, colors.white, (0, HEIGHT/2), (WIDTH, HEIGHT/2))
-    circle = pygame.draw.circle(
-        win, ball.COLOR, (int(ball.x), int(ball.y)), ball.RADIUS
-    )
-    rect = pygame.draw.rect(
-        win,
-        paddle.COLOR,
-        (int(paddle.x), int(paddle.y), paddle.WIDTH, paddle.THICKNESS),
-        0,
-    )
-    pygame.display.update()
-    return circle, rect
-
 def controls(event, paddle):
+    """Paddle movement controls & keys."""
     logging.debug(f"Player controls")
 
     k_left, k_right = pygame.K_LEFT, pygame.K_RIGHT
@@ -64,7 +41,7 @@ def controls(event, paddle):
                 paddle.dx = -dx
 
 def main():
-
+    """Game loop."""
     logging.info("Starting main")
     clock = pygame.time.Clock()
     running = True
@@ -93,21 +70,17 @@ def main():
 
         pygame.quit()
         quit()
-    except Exception as e:
+        
+    except Exception as exc:
         logging.critical(error_details())
-        # logging.critical(f'{e}', exc_info=True)
+        # logging.critical(f'{exc}', exc_info=True)
         # logging.exception("Exception, quitting")
         pygame.quit()
-        raise e
-        # quit()
-
-
-
+        raise exc
+        #quit()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    dx = 10
-    WIDTH, HEIGHT = 600, 800 
     pygame.init()
     WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Pong")

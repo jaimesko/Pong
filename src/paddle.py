@@ -1,26 +1,12 @@
-#from pong import colors
 import logging
-import collections as c 
-color_tuples = c.namedtuple("color_tuples", "black white red green blue")
-colors = color_tuples(
-    black=(0, 0, 0),
-    white=(255, 255, 255),
-    red=(255, 0, 0),
-    green=(0, 255, 0),
-    blue=(0, 0, 255),
-)
-
-dx = 10
-WIDTH, HEIGHT = 600, 800 
+from drawing import colors
+from settings import HEIGHT, WIDTH
 
 class Paddle:
 
     COLOR = colors.white
     THICKNESS = 10
     WIDTH = 100
-    #X = WIDTH / 2
-    #Y = HEIGHT - 10 - THICKNESS
-    #DX = 0
 
     def __init__(self):
         logging.info(f"Instantiating {self.__class__.__name__}")
@@ -38,11 +24,13 @@ class Paddle:
         return f"Paddle"
 
     def update(self):
+        "Updates the paddle's position after a game tick."
         logging.debug(f"Paddle position update")
         self.x += self.dx
         return self
 
     def wall_collision(self):
+        """Checks for collisions with the wall and prevents the paddle moving beyond window limits."""
         logging.debug(f"Paddle wall collision check")
         if self.x < 0:
             self.x = 0
